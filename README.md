@@ -1,4 +1,4 @@
-WMISpoofer
+WMISpoofer forked from ccman32
 =================================
 
 OVERVIEW
@@ -8,7 +8,7 @@ It uses the AppInit_DLLs registry value to inject a dll into all running program
 
 INSTALLATION
 -----
-- Download the latest release from https://github.com/ccman32/WMISpoofer/releases
+- Download the latest release from https://github.com/Speedi13/WMISpoofer/releases
 - Extract all files from the .rar archive
 - Run the WMISpooferGUI.exe file
 - Click the "Install" button to install WMISpoofer
