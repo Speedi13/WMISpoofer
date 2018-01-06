@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -13,6 +13,21 @@ namespace WMISpooferGUI
 {
     public partial class MainForm : Form
     {
+
+        [System.Runtime.InteropServices.DllImport("kernel32", SetLastError = true)]
+        static extern bool FreeLibrary(IntPtr hModule);
+
+        public static void UnloadModule(string moduleName)
+        {
+            foreach (System.Diagnostics.ProcessModule mod in System.Diagnostics.Process.GetCurrentProcess().Modules)
+            {
+                if (mod.ModuleName == moduleName)
+                {
+                    FreeLibrary(mod.BaseAddress);
+                }
+            }
+        }
+
         private bool isInstalled = false;
 
         public MainForm()
@@ -161,9 +176,16 @@ namespace WMISpooferGUI
                 return;
             }
 
-            updateInstallationStatus();
-            loadClasses();
+            //so we are not hooked!
+            UnloadModule("WMISpoofer_32.dll");
+            UnloadModule("WMISpoofer_64.dll");
 
+            
+
+            updateInstallationStatus();
+           
+            loadClasses();
+           
             if (isInstalled)
             {
                 importItems(Installer.GetInstallationIniFileName());
