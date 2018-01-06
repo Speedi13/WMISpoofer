@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,10 +13,11 @@ namespace WMISpooferGUI.Model
     {
         private const int MAX_PATH = 255;
 
-        private static string localAppDataPath = getShortPath(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
-        private static string installationFilePath = Path.Combine(localAppDataPath, "WMIS");
-        private static string installationFileName32 = Path.Combine(installationFilePath, "WMIS32.dll");
-        private static string installationFileName64 = Path.Combine(installationFilePath, "WMIS64.dll");
+        //to make it more clear to the user just store them directly on the c drive
+        private static string localAppDataPath = "c:\\";//getShortPath(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+        private static string installationFilePath = localAppDataPath;//Path.Combine(localAppDataPath, "WMIS");
+        private static string installationFileName32 = Path.Combine(installationFilePath, "WMISpoofer_32.dll");
+        private static string installationFileName64 = Path.Combine(installationFilePath, "WMISpoofer_64.dll");
         private static string installationIniFileName = Path.Combine(installationFilePath, "WMIS.ini");
 
         private static string getShortPath(string path)
@@ -143,22 +144,15 @@ namespace WMISpooferGUI.Model
 
             if (installationFileExists)
             {
-                try
-                {
-                    Directory.Delete(installationFilePath, true);
-                }
-                catch (UnauthorizedAccessException)
-                {
+               
                     systemRestartRequired = true;
 
                     if (!NativeMethods.MoveFileEx(installationIniFileName, null, MoveFileFlags.DelayUntilReboot)
                         || !NativeMethods.MoveFileEx(installationFileName32, null, MoveFileFlags.DelayUntilReboot)
-                        || !NativeMethods.MoveFileEx(installationFileName64, null, MoveFileFlags.DelayUntilReboot)
-                        || !NativeMethods.MoveFileEx(installationFilePath, null, MoveFileFlags.DelayUntilReboot))
+                        || !NativeMethods.MoveFileEx(installationFileName64, null, MoveFileFlags.DelayUntilReboot))
                     {
                         MessageBox.Show("Failed to schedule the installation folder for deletion!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                }
             }
 
             MessageBox.Show("Successfully uninstalled WMI Spoofer!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
