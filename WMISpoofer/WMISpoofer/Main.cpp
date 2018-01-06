@@ -27,26 +27,10 @@ BOOL WINAPI DllMain(
 		)
 	{
 		hSelf = hinstDLL;
-
-		HANDLE hInitializeThread = CreateThread(
-			NULL,
-			0,
-			&Initialize,
-			NULL,
-			0,
-			NULL
-		);
-
-		if (
-			hInitializeThread
-			)
-		{
-			CloseHandle(
-				hInitializeThread
-			);
-
+		//for hooking faster hook the function from the dllmain
+		//old method was calling  creating a thread
+		if ( Initialize(NULL) == ERROR_SUCCESS)
 			return TRUE;
-		}
 	}
 	else if (
 		fdwReason == DLL_PROCESS_DETACH
