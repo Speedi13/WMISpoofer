@@ -132,6 +132,8 @@ namespace WMISpooferGUI
 
         private void importItems(string path)
         {
+            if (!File.Exists(path)) return;
+
             if (newValuesListView.Items.Count > 0
                     && MessageBox.Show("There are already entries in the \"New Values\" list! Do you want to delete them before importing the entries from the file?",
                     "Import",
